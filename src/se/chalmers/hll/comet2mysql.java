@@ -27,9 +27,10 @@ import org.xml.sax.SAXException;
 
 public class comet2mysql {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException, ParserConfigurationException, SAXException {
 
         ArrayList<String> ip = new ArrayList<String>();
+                xml2mysql x2s= new xml2mysql();
         try (BufferedReader br = new BufferedReader(new FileReader("/root/NetBeansProjects/Comet2mysql/src/resources/iplist"))) {
             String sCurrentLine;
             while ((sCurrentLine = br.readLine()) != null) {
@@ -49,6 +50,9 @@ public class comet2mysql {
             System.out.println(fileURL);
             i++;
         }
+
+        x2s.xml2mysql();
+
         
 //        try {
             //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");

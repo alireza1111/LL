@@ -31,8 +31,9 @@ import org.xml.sax.SAXException;
  * @author root
  */
 public class xml2mysql {
-    public void xml2mysql() throws SQLException{
-         try {
+
+    public void xml2mysql() {
+        try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
             Class.forName("com.mysql.jdbc.Driver");
             Properties config = new Properties();
@@ -46,9 +47,9 @@ public class xml2mysql {
             Statement st = con.createStatement();
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-            
-            Date date= new Date();
-            String timestamp= dateFormat.format(date);
+
+            Date date = new Date();
+            String timestamp = dateFormat.format(date).toString();
             File folder = new File("/usr/local/bin/comet/temp");
             File[] listOfFiles = folder.listFiles();
             if (listOfFiles != null) {
@@ -57,16 +58,93 @@ public class xml2mysql {
                         Document doc = docBuilder.parse(new File(child.getPath()));
                         doc.getDocumentElement().normalize();
                         System.out.println("Root element of the doc is " + doc.getDocumentElement().getNodeName());
-                        NodeList errorTag = doc.getElementsByTagName("err");
-                        String error=errorTag.item(0).toString();
-                        NodeList serialNumber = doc.getElementsByTagName("devsn");
-                        String sn= serialNumber.item(0).toString();
-                        NodeList synCh= doc.getElementsByTagName("synch");
-                        String synch= synCh.item(0).toString();
-                        NodeList ch1= doc.getElementsByTagName("ch1");
-                        String ch1_name= ch1
-                        
-                        
+                        NodeList xmlroot = doc.getElementsByTagName("root");
+
+                        for (int s = 0; s < xmlroot.getLength(); s++) {
+                            Node firstNode = xmlroot.item(s);
+                            if (firstNode.getNodeType() == Node.ELEMENT_NODE) {
+                                Element firstElement = (Element) firstNode;
+                                String error = firstElement.getElementsByTagName("err").toString();
+                                String sn = firstElement.getElementsByTagName("devsn").toString();
+                                NodeList ch1 = firstElement.getElementsByTagName("ch1");
+                                for (int i = 0; i < ch1.getLength(); i++) {
+                                    Node firstCh1Node = ch1.item(i);
+                                    if (firstCh1Node.getNodeType() == Node.ELEMENT_NODE) {
+                                        Element firstCh1Element = (Element) firstCh1Node;
+                                        String channel_name = firstCh1Element.getElementsByTagName("name").toString();
+                                        String value = firstCh1Element.getElementsByTagName("aval").toString();
+                                        String unit = firstCh1Element.getElementsByTagName("\ufffdC").toString();
+                                        String alarm = firstCh1Element.getElementsByTagName("alarm").toString();
+                                        String channel_number = "1";
+                                        int j = st.executeUpdate("insert into comet(timestamp,serial_number,error,"
+                                                + " channel_number, channel_name, value, unit, alarm) "
+                                                + "values('" + timestamp
+                                                + "','" + sn + "','" + error + "','" + channel_number + "','" + channel_name + "','" + value
+                                                + "','" + unit + "','" + alarm + "')");
+                                    }
+                                }
+                                NodeList ch2 = firstElement.getElementsByTagName("ch2");
+                                for (int i = 0; i < ch2.getLength(); i++) {
+                                    Node firstCh2Node = ch2.item(i);
+                                    if (firstCh2Node.getNodeType() == Node.ELEMENT_NODE) {
+                                        Element firstCh2Element = (Element) firstCh2Node;
+                                        String channel_name = firstCh2Element.getElementsByTagName("name").toString();
+                                        String value = firstCh2Element.getElementsByTagName("aval").toString();
+                                        String unit = firstCh2Element.getElementsByTagName("%RH").toString();
+                                        String alarm = firstCh2Element.getElementsByTagName("alarm").toString();
+                                        String channel_number = "2";
+                                        int j = st.executeUpdate("insert into comet(timestamp,serial_number,error,"
+                                                + " channel_number, channel_name, value, unit, alarm) "
+                                                + "values('" + timestamp
+                                                + "','" + sn + "','" + error + "','" + channel_number + "','" + channel_name + "','" + value
+                                                + "','" + unit + "','" + alarm + "')");
+                                    }
+                                }
+                                NodeList ch3 = firstElement.getElementsByTagName("ch3");
+                                for (int i = 0; i < ch3.getLength(); i++) {
+                                    Node firstCh3Node = ch3.item(i);
+                                    if (firstCh3Node.getNodeType() == Node.ELEMENT_NODE) {
+                                        Element firstCh3Element = (Element) firstCh3Node;
+                                        String channel_name = firstCh3Element.getElementsByTagName("name").toString();
+                                        String value = firstCh3Element.getElementsByTagName("aval").toString();
+                                        String unit = firstCh3Element.getElementsByTagName("\ufffdC").toString();
+                                        String alarm = firstCh3Element.getElementsByTagName("alarm").toString();
+                                        String channel_number = "3";
+                                        int j = st.executeUpdate("insert into comet(timestamp,serial_number,error,"
+                                                + " channel_number, channel_name, value, unit, alarm) "
+                                                + "values('" + timestamp
+                                                + "','" + sn + "','" + error + "','" + channel_number + "','" + channel_name + "','" + value
+                                                + "','" + unit + "','" + alarm + "')");
+                                    }
+                                }
+                                NodeList ch4 = firstElement.getElementsByTagName("ch2");
+                                for (int i = 0; i < ch4.getLength(); i++) {
+                                    Node firstCh4Node = ch4.item(i);
+                                    if (firstCh4Node.getNodeType() == Node.ELEMENT_NODE) {
+                                        Element firstCh4Element = (Element) firstCh4Node;
+                                        String channel_name = firstCh4Element.getElementsByTagName("name").toString();
+                                        String value = firstCh4Element.getElementsByTagName("aval").toString();
+                                        String unit = firstCh4Element.getElementsByTagName("ppm").toString();
+                                        String alarm = firstCh4Element.getElementsByTagName("alarm").toString();
+                                        String channel_number = "4";
+                                        int j = st.executeUpdate("insert into comet(timestamp,serial_number,error,"
+                                                + " channel_number, channel_name, value, unit, alarm) "
+                                                + "values('" + timestamp
+                                                + "','" + sn + "','" + error + "','" + channel_number + "','" + channel_name + "','" + value
+                                                + "','" + unit + "','" + alarm + "')");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException | SQLException | ParserConfigurationException | SAXException err) {
+            System.out.println(" " + err.getMessage());
+
+        }
+
+        /*  
                         for (int s = 0; s < listOfSensors.getLength(); s++) {
                             Node firstSensorNode = listOfSensors.item(s);
                             if (firstSensorNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -109,12 +187,7 @@ public class xml2mysql {
             System.out.println("Data is successfully inserted!");
         } catch (IOException | ClassNotFoundException | SQLException | ParserConfigurationException | SAXException err) {
             System.out.println(" " + err.getMessage());
-        }
+        } */
     }
 
-        
-    }
-    
-    
-    
 }
