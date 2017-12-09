@@ -23,7 +23,8 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author Alireza Davoudian
- * @date 06/12/2017 16:30 PM
+ * @date 06/12/2017 16:30 
+ * @date 09/12/2017 17:40
  */
 public class xml2mysql {
 
