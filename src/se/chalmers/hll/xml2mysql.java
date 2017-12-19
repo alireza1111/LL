@@ -11,6 +11,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,12 +24,12 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author Alireza Davoudian
- * @date 06/12/2017 16:30 
+ * @date 06/12/2017 16:30
  * @date 09/12/2017 17:40
  */
 public class xml2mysql {
 
-    public void xml2mysql() {
+    public void xml2mysql() throws InterruptedException {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Class.forName("com.mysql.jdbc.Driver");
@@ -43,7 +44,6 @@ public class xml2mysql {
             Statement st = con.createStatement();
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-
             Date date = new Date();
             String timestamp = dateFormat.format(date);
             File folder = new File("/usr/local/bin/comet/temp");
@@ -61,10 +61,10 @@ public class xml2mysql {
                         NodeList ch2 = doc.getElementsByTagName("ch2");
                         NodeList ch3 = doc.getElementsByTagName("ch3");
                         NodeList ch4 = doc.getElementsByTagName("ch4");
-                        
+
                         String error = err.item(0).getTextContent();
                         String sn = serial_number.item(0).getTextContent();
-                        
+
                         Node ch1Node = ch1.item(0);
                         Element ch1Element = (Element) ch1Node;
                         String channel_name = ch1Element.getElementsByTagName("name").item(0).getTextContent();
@@ -118,7 +118,9 @@ public class xml2mysql {
                                 + "','" + unit + "','" + alarm + "')");
                     }
                 }
+                TimeUnit.SECONDS.sleep(3);
             }
+
         } catch (IOException | ClassNotFoundException | SQLException | ParserConfigurationException | SAXException err) {
             System.out.println(" " + err.getMessage());
         }

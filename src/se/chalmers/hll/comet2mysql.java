@@ -7,6 +7,7 @@ package se.chalmers.hll;
  *
  * @author Alireza Davoudian
  * @date 06/12/2017 16:30 PM
+ * @updted 18/12/2017
  */
 import java.io.*;
 import java.net.MalformedURLException;
@@ -24,10 +25,11 @@ import org.xml.sax.SAXException;
 
 public class comet2mysql {
 
-    public static void main(String[] args) throws IOException, SQLException, ParserConfigurationException, SAXException {
+    public static void main(String[] args) throws IOException, SQLException, ParserConfigurationException, SAXException, InterruptedException {
+        cleanFolder();
 
         ArrayList<String> ip = new ArrayList<String>();
-                xml2mysql x2s= new xml2mysql();
+        xml2mysql x2s = new xml2mysql();
         try (BufferedReader br = new BufferedReader(new FileReader("/root/NetBeansProjects/Comet2mysql/src/resources/iplist"))) {
             String sCurrentLine;
             while ((sCurrentLine = br.readLine()) != null) {
@@ -52,11 +54,12 @@ public class comet2mysql {
     }
 
     public static void saveXML(String fileName, String fileUrl) throws MalformedURLException, IOException {
+
         BufferedInputStream in = null;
         FileOutputStream fout = null;
         try {
             in = new BufferedInputStream(new URL(fileUrl).openStream());
-            fout = new FileOutputStream("/usr/local/bin/comet/temp/"+fileName);
+            fout = new FileOutputStream("/usr/local/bin/comet/temp/" + fileName);
 
             byte data[] = new byte[1024];
             int count;
@@ -70,6 +73,14 @@ public class comet2mysql {
             if (fout != null) {
                 fout.close();
             }
+        }
+    }
+
+    public static void cleanFolder() {
+        File folder = new File("/usr/local/bin/comet/temp");
+        File[] listOfFiles = folder.listFiles();
+        for (File file : listOfFiles) {
+            file.delete();
         }
     }
 }
