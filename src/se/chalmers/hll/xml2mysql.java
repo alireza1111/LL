@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -118,12 +120,24 @@ public class xml2mysql {
                                 + "','" + unit + "','" + alarm + "')");
                     }
                 }
-                TimeUnit.SECONDS.sleep(3);
+            }
+            TimeUnit.SECONDS.sleep(3);
+            checkQ chq = new checkQ();
+            if (chq.checkQ()) {
+                int jj = st.executeUpdate("set @timestamp:=CURRENT_TIMESTAMP;");
+                jj = st.executeUpdate(" insert into Comet select @timestamp,serial_number,error,channel_number,"
+                        + " channel_name,channel_description,avg(value), unit, alarm from comet"
+                        + " where channel_number in(select channel_number from comet group by channel_number) "
+                        + "and serial_number in(select serial_number from comet group by serial_number) "
+                        + "and error in (select error from comet group by error) group by serial_number, channel_number, "
+                        + "channel_name, channel_description,unit, alarm,error");
+                jj = st.executeUpdate("truncate table comet");
             }
 
         } catch (IOException | ClassNotFoundException | SQLException | ParserConfigurationException | SAXException err) {
             System.out.println(" " + err.getMessage());
         }
+
     }
 
 }
