@@ -74,7 +74,7 @@ public class xml2mysql {
                         String unit = ch1Element.getElementsByTagName("unit").item(0).getTextContent();
                         String alarm = ch1Element.getElementsByTagName("alarm").item(0).getTextContent();
                         String channel_number = "1";
-                        int j = st.executeUpdate("insert into comet(timestamp,serial_number,error,"
+                        int j = st.executeUpdate("insert into cometTemp(timestamp,serial_number,error,"
                                 + " channel_number, channel_name, value, unit, alarm) "
                                 + "values('" + timestamp
                                 + "','" + sn + "','" + error + "','" + channel_number + "','" + channel_name + "','" + value
@@ -87,7 +87,7 @@ public class xml2mysql {
                         unit = ch2Element.getElementsByTagName("unit").item(0).getTextContent();
                         alarm = ch2Element.getElementsByTagName("alarm").item(0).getTextContent();
                         channel_number = "2";
-                        j = st.executeUpdate("insert into comet(timestamp,serial_number,error,"
+                        j = st.executeUpdate("insert into cometTemp(timestamp,serial_number,error,"
                                 + " channel_number, channel_name, value, unit, alarm) "
                                 + "values('" + timestamp
                                 + "','" + sn + "','" + error + "','" + channel_number + "','" + channel_name + "','" + value
@@ -100,7 +100,7 @@ public class xml2mysql {
                         unit = ch3Element.getElementsByTagName("unit").item(0).getTextContent();
                         alarm = ch3Element.getElementsByTagName("alarm").item(0).getTextContent();
                         channel_number = "3";
-                        j = st.executeUpdate("insert into comet(timestamp,serial_number,error,"
+                        j = st.executeUpdate("insert into cometTemp(timestamp,serial_number,error,"
                                 + " channel_number, channel_name, value, unit, alarm) "
                                 + "values('" + timestamp
                                 + "','" + sn + "','" + error + "','" + channel_number + "','" + channel_name + "','" + value
@@ -113,7 +113,7 @@ public class xml2mysql {
                         unit = ch4Element.getElementsByTagName("unit").item(0).getTextContent();
                         alarm = ch4Element.getElementsByTagName("alarm").item(0).getTextContent();
                         channel_number = "4";
-                        j = st.executeUpdate("insert into comet(timestamp,serial_number,error,"
+                        j = st.executeUpdate("insert into cometTemp(timestamp,serial_number,error,"
                                 + " channel_number, channel_name, value, unit, alarm) "
                                 + "values('" + timestamp
                                 + "','" + sn + "','" + error + "','" + channel_number + "','" + channel_name + "','" + value
@@ -126,12 +126,12 @@ public class xml2mysql {
             if (chq.checkQ()) {
                 int jj = st.executeUpdate("set @timestamp:=CURRENT_TIMESTAMP;");
                 jj = st.executeUpdate(" insert into Comet select @timestamp,serial_number,error,channel_number,"
-                        + " channel_name,channel_description,avg(value), unit, alarm from comet"
-                        + " where channel_number in(select channel_number from comet group by channel_number) "
-                        + "and serial_number in(select serial_number from comet group by serial_number) "
-                        + "and error in (select error from comet group by error) group by serial_number, channel_number, "
+                        + " channel_name,channel_description,avg(value), unit, alarm from cometTemp"
+                        + " where channel_number in(select channel_number from cometTemp group by channel_number) "
+                        + "and serial_number in(select serial_number from cometTemp group by serial_number) "
+                        + "and error in (select error from cometTemp group by error) group by serial_number, channel_number, "
                         + "channel_name, channel_description,unit, alarm,error");
-                jj = st.executeUpdate("truncate table comet");
+                jj = st.executeUpdate("truncate table cometTemp");
             }
 
         } catch (IOException | ClassNotFoundException | SQLException | ParserConfigurationException | SAXException err) {

@@ -39,7 +39,7 @@ public class checkQ {
         Connection con = DriverManager.getConnection(url, username, password);
         ResultSet rs;
         Statement stmt = con.createStatement();
-        String q = "select id from comet order by id desc limit 1";
+        String q = "select id from cometTemp order by id desc limit 1";
         rs = stmt.executeQuery(q);
         rs.next();
         int ii = rs.getInt("id");
